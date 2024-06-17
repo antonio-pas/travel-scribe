@@ -1,14 +1,27 @@
-export default function Dashboard() {
+import { getEntries } from '../actions'
+import NewButton from './new-button'
+function Entry({entry}: { entry: any }) {
   return (
-    <div className="flex h-screen">
-      <ul className="menu">
-        <img
-          src="https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=300"
-          className="w-12 h-12 aspect-square rounded-full object-cover" 
-        />
-        <li>
-        </li>
-      </ul>
+    <div className="p-12 rounded-xl bg-base-300 flex flex-col gap-4">
+      <h3 className="text-xl tracking-tight font-bold">{entry.title}</h3>
+      <span className="opacity-60 text-sm">{entry.createdAt.toDateString()}</span>
+      <p className="opacity-70">{entry.contents}</p>
     </div>
+  )
+}
+export default async function Dashboard() {
+  const entries = await getEntries();
+  return (
+    <>
+      <h1 className="text-5xl font-extrabold tracking-tight mb-10">Entries</h1>
+      <div className="grid gap-8 grid-rows-[repeat(auto-fill, 500px)] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <NewButton />
+        {entries.map((e, i) => {
+          return (
+            <Entry key={i} entry={e}></Entry>
+          )
+        })}
+      </div>
+    </>
   )
 }
